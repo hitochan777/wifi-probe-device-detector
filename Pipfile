@@ -9,6 +9,7 @@ pylint = "*"
 [packages]
 scapy = "*"
 rx = "*"
+azure-iot-device = "*"
 
 [requires]
 python_version = "3.8"
