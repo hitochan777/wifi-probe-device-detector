@@ -28,10 +28,8 @@ class DeviceSniffer():
                 return
 
             source_mac_addr = packet.addr2.upper()
-            # logging.info(f"{target_ssid} {source_mac_addr}")
             self.device_dectect_stream.on_next((target_ssid, source_mac_addr))
         except Exception as err:
-            # logging.error(err)
             self.device_dectect_stream.on_error(err)
     
     def get_observable(self):
