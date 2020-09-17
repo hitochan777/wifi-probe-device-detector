@@ -4,7 +4,7 @@ import time
 
 from device_sniffer import DeviceSniffer
 from attendance_upload_service import AttendanceUploadService
-
+from state_manager import AttendanceStateContext
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -17,7 +17,7 @@ if __name__ == "__main__":
     try:
         device_sniffer.start()
         observable = device_sniffer.get_observable()
-        # observable.subscribe()
+        observable.subscribe()
         while True:
             time.sleep(1)
 
