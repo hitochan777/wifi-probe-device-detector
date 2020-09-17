@@ -1,3 +1,4 @@
+from typing import Optional
 from datetime import datetime
 import logging
 from scapy.all import sniff, AsyncSniffer, Packet
@@ -5,6 +6,11 @@ from scapy.layers.dot11 import Dot11Elt
 from rx.core import Observer
 from rx.subject import Subject
 import rx
+
+from attendance import Attendance
+
+def get_userid_from_sniff_result(ssid: str, source_mac_addr: str) -> Optional[str]:
+    return ""
 
 class DeviceSniffer():
     def __init__(self, interface="mon0"):
@@ -28,7 +34,10 @@ class DeviceSniffer():
                 return
 
             source_mac_addr = packet.addr2.upper()
-            self.device_dectect_stream.on_next((target_ssid, source_mac_addr))
+            userid = get_userid_from_sniff_result(target_ssid, source_mac_addr)
+            if userid is not None:
+                self.device_dectect_stream.on_next(userid)
+
         except Exception as err:
             self.device_dectect_stream.on_error(err)
     
