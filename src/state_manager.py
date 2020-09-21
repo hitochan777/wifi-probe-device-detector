@@ -2,6 +2,7 @@ from typing import Optional, List
 from rx.scheduler import NewThreadScheduler
 from rx.disposable import Disposable
 from datetime import datetime
+import json
 
 class State:
     def detect_existence(self, context: "StateContext"):
@@ -65,13 +66,21 @@ class SniffConfig:
 
 
 class AttendaceStateContextManager:
+    @staticmethod
+    def create(filename) -> "AttendaceStateContextManager":
+        with open(filename, "r") as f:
+            configs: List[SniffConfig] = json.load(f)
+
+        return AttendaceStateContextManager(configs)
+
+
     def __init__(self, sniff_configs: List[SniffConfig]):
         self.state_map = dict()
         for config in sniff_configs:
             self.add_by_user_id(config.userid, config)
 
-    # def delete_by_user_id(self, userid: str):
-    #     pass
+    def delete_by_user_id(self, userid: str):
+        pass
 
     def add_by_user_id(self, userid: str, sniff_config: SniffConfig):
         assert userid == sniff_config.userid
