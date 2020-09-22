@@ -23,18 +23,20 @@ class AttendancenStateContext:
         if self.schedule_obj is not None and not self.schedule_obj.is_disposed:
             self.schedule_obj.dispose()
 
-    def start_scheduler(self):
+    def update_scheduler(self):
         self.clear_scheduler_if_running()
         self.schedule_obj = NewThreadScheduler().schedule_relative(self.absence_due_second, self.detect_absence)
 
     def detect_attendance(self, userid: str):
         assert self.userid == userid
-        self.start_scheduler()
-        self.is_attending = False
-        self.subject.on_next({
-            "type": AttendanceType.Attend,
-            "userid": userid
-        })
+        self.update_scheduler()
+        if not self.is_attending:
+            self.subject.on_next({
+                "type": AttendanceType.Attend,
+                "userid": userid
+            })
+
+        self.is_attending = True
 
     def detect_absence(self, _, __):
         self.is_attending = False

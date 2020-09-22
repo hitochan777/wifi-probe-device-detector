@@ -16,7 +16,6 @@ from attendance import Attendance
 class AttendanceStateContextManager:
     def __init__(self, sniff_configs: List[Config], attend_notifier: Observable, upload_service: AttendanceUploadService):
         self.attend_notifier = attend_notifier
-        attend_notifier.subscribe(lambda x: print(x)) 
         self.observable_map = dict()
         for config in sniff_configs:
             self.add_by_user_id(config.userid, config)
@@ -32,7 +31,7 @@ class AttendanceStateContextManager:
     def add_by_user_id(self, userid: str, sniff_config: Config):
         assert userid == sniff_config.userid
         assert userid not in self.observable_map
-        filtered_notification = self.attend_notifier.pipe(operators.filter(lambda uid: uid == userid))
+        filtered_notification = self.attend_notifier.pipe(operators.filter(lambda uid: uid == userid)).pipe(operators.throttle_first(1))
         context = AttendancenStateContext(userid, False, filtered_notification)
         self.observable_map[sniff_config.userid] = context.get_observable()
         self.observable_map[sniff_config.userid].subscribe(self.handle_state_change)
