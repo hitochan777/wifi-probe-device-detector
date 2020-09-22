@@ -14,7 +14,8 @@ class AttendanceUploadService:
 
     def upload(self, attendance: Attendance):
         message = self.convert_attendance_to_message(attendance)
-        self.iothub_client.send_message(message)
+        print(message)
+        # self.iothub_client.send_message(message)
 
     def convert_attendance_to_message(self, attendance: Attendance):
         message_text= f'{{"type": {attendance.attendance_type},"attendance": {attendance.occurred_at}}}'
