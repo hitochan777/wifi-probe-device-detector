@@ -8,14 +8,14 @@ from rx.subject import Subject
 import rx
 
 from attendance import Attendance
+from user_querier import UserQuerier
 
-def get_userid_from_sniff_result(ssid: str, source_mac_addr: str) -> Optional[str]:
-    return ""
 
-class DeviceSniffer():
-    def __init__(self, interface="mon0"):
+class DeviceSniffer:
+    def __init__(self, user_querier: UserQuerier, interface="mon0"):
         self.async_sniffer = AsyncSniffer(prn=self.handle_packet, store=False,iface=interface, monitor=True)
         self.device_dectect_stream = Subject()
+        self.user_querier = user_querier
 
     def __del__(self):
         self.device_dectect_stream.on_completed()
@@ -34,14 +34,14 @@ class DeviceSniffer():
                 return
 
             source_mac_addr = packet.addr2.upper()
-            userid = get_userid_from_sniff_result(target_ssid, source_mac_addr)
+            userid = self.user_querier.get_userid(target_ssid, source_mac_addr)
             if userid is not None:
                 self.device_dectect_stream.on_next(userid)
 
         except Exception as err:
             self.device_dectect_stream.on_error(err)
     
-    def get_observable(self):
+    def get_observable(self) -> Subject:
         return self.device_dectect_stream
 
     def start(self):

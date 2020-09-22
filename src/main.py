@@ -1,23 +1,33 @@
 import argparse
 import os
 import time
+import json
 
 from device_sniffer import DeviceSniffer
 from attendance_upload_service import AttendanceUploadService
-from state_manager import AttendanceStateContext
+from state_context_manager import AttendanceStateContextManager 
+from config import Config
+from user_querier import UserQuerier
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--interface', '-i', default='mon0', help='monitor mode enabled interface')
+    parser.add_argument('--config', '-c', default='mon0', help='path to JSON config file')
     args = parser.parse_args()
+
+    configs = []
+    with open(args.config, "r") as f:
+        raw_configs = json.load(f)
+        for raw_config in raw_configs:
+            configs.append(Config(raw_config["userid"], raw_config["ssid"], raw_config["mac_address"], raw_config["absence_due_second"]))
 
     connection_string = os.environ.get("IOTHUB_DEVICE_CONNECTION_STRING")
     upload_service = AttendanceUploadService(connection_string)
-    device_sniffer = DeviceSniffer(args.interface)
+    user_querier = UserQuerier()
+    device_sniffer = DeviceSniffer(user_querier, args.interface)
+    state_context_manager = AttendanceStateContextManager(configs, device_sniffer.get_observable())
     try:
         device_sniffer.start()
-        observable = device_sniffer.get_observable()
-        observable.subscribe()
         while True:
             time.sleep(1)
 
