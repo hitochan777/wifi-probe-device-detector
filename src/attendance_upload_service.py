@@ -3,7 +3,7 @@ from azure.iot.device import IoTHubDeviceClient, Message
 from attendance import Attendance
 
 
-class AttendanceUploadService():
+class AttendanceUploadService:
     @staticmethod
     def iothub_client_init(connection_string):
         client = IoTHubDeviceClient.create_from_connection_string(connection_string)

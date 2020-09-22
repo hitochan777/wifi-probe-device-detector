@@ -3,20 +3,25 @@ from rx.subject import Subject
 from rx import Observable
 from rx import operators
 import json
+from datetime import datetime
 
 from attendance_type import AttendanceType
 from device_sniffer import DeviceSniffer
 from config import Config
 from state_context import AttendancenStateContext 
+from attendance_upload_service import AttendanceUploadService
+from attendance import Attendance
 
 
 class AttendanceStateContextManager:
-    def __init__(self, sniff_configs: List[Config], attend_notifier: Observable):
+    def __init__(self, sniff_configs: List[Config], attend_notifier: Observable, upload_service: AttendanceUploadService):
         self.attend_notifier = attend_notifier
         attend_notifier.subscribe(lambda x: print(x)) 
         self.observable_map = dict()
         for config in sniff_configs:
             self.add_by_user_id(config.userid, config)
+
+        self.upload_service = upload_service
 
     def delete_by_user_id(self, userid: str):
         if userid not in self.observable_map:
@@ -33,14 +38,9 @@ class AttendanceStateContextManager:
         self.observable_map[sniff_config.userid].subscribe(self.handle_state_change)
 
     def handle_state_change(self, payload):
-        if payload["type"] == AttendanceType.Attend:
-            print(f"{payload['userid']} is attending")
-            # TODO: write to db and publish message
-            pass
-        elif payload["type"] == AttendanceType.Leave:
-            print(f"{payload['userid']} is leaving")
-            # TODO: write to db and publish message
-            pass
+        now = datetime.now
+        if payload["type"] in [AttendanceType.Attend, AttendanceType.Leave]:
+            self.upload_service.upload(Attendance(payload["userid"], payload["type"], now))
         else:
             raise ValueError(f"{payload['type']} is not expected")
 

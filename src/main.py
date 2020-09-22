@@ -25,7 +25,8 @@ if __name__ == "__main__":
     upload_service = AttendanceUploadService(connection_string)
     user_querier = UserQuerier()
     device_sniffer = DeviceSniffer(user_querier, args.interface)
-    state_context_manager = AttendanceStateContextManager(configs, device_sniffer.get_observable())
+    state_context_manager = AttendanceStateContextManager(configs, device_sniffer.get_observable(), upload_service)
+
     try:
         device_sniffer.start()
         while True:
