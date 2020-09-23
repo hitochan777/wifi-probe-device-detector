@@ -3,7 +3,7 @@ from rx.subject import Subject
 from rx import Observable
 from rx import operators
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 
 from attendance_type import AttendanceType
 from device_sniffer import DeviceSniffer
@@ -37,7 +37,7 @@ class AttendanceStateContextManager:
         self.observable_map[sniff_config.userid].subscribe(self.handle_state_change)
 
     def handle_state_change(self, payload):
-        now = datetime.now
+        now = datetime.now(timezone.utc).isoformat(timespec="seconds")
         if payload["type"] in [AttendanceType.Attend, AttendanceType.Leave]:
             self.upload_service.upload(Attendance(payload["userid"], payload["type"], now))
         else:

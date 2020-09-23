@@ -22,7 +22,8 @@ if __name__ == "__main__":
             configs.append(Config(raw_config["userid"], raw_config["ssid"], raw_config["mac_address"], raw_config["absence_due_second"]))
 
     connection_string = os.environ.get("IOTHUB_DEVICE_CONNECTION_STRING")
-    upload_service = AttendanceUploadService(connection_string)
+    assert len(connection_string) > 0, "IoTHub connection string should not be empty"
+    upload_service = AttendanceUploadService.create(connection_string, is_dry_run=False)
     user_querier = UserQuerier()
     device_sniffer = DeviceSniffer(user_querier, args.interface)
     state_context_manager = AttendanceStateContextManager(configs, device_sniffer.get_observable(), upload_service)
