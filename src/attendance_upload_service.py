@@ -7,7 +7,7 @@ class AttendanceUploadService:
     @staticmethod
     def create(connection_string, is_dry_run = False):
         client = IoTHubDeviceClient.create_from_connection_string(connection_string)
-        return AttendanceUploadService(client, is_dry_run=is_dry_run) 
+        return AttendanceUploadService(client, is_dry_run=is_dry_run)
 
     def __init__(self, client: IoTHubDeviceClient, is_dry_run = False):
         self.iothub_client = client
@@ -20,5 +20,5 @@ class AttendanceUploadService:
             self.iothub_client.send_message(message)
 
     def convert_attendance_to_message(self, attendance: Attendance):
-        message_text= f'{{"type": {attendance.attendance_type.value},"attendance": {attendance.occurred_at}}}'
+	    message_text= f'{{"type": {attendance.attendance_type.value},"occurredAt": {attendance.occurred_at}}}, "userId": {attendance.userid}'
         return Message(message_text)
