@@ -37,7 +37,7 @@ class AttendanceStateContextManager:
         self.observable_map[sniff_config.userid].subscribe(self.handle_state_change)
 
     def handle_state_change(self, payload):
-        now = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        now = datetime.now(timezone.utc)
         if payload["type"] in [AttendanceType.Attend, AttendanceType.Leave]:
             self.upload_service.upload(Attendance(payload["userid"], payload["type"], now))
         else:
