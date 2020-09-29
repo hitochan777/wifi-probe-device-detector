@@ -1,6 +1,6 @@
 # wifi-probe-device-detector
 
-Detects devices' arrival and departure using WiFi probe request (MAC address or SSID)
+Detects devices' arrival and departure using WiFi probe request (MAC address or SSID) then uploads detected information to IoTHub.
 
 ## Requirements
 
