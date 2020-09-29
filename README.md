@@ -25,20 +25,20 @@ $ docker pull docker.pkg.github.com/hitochan777/wifi-probe-device-detector/wifi-
 1. Create configuration file. This file contains a list of configuration which enables the detector to map SSID or MAC address to an username, and other optional information.
 
    ```json
-   	\[
-   		{
-   			"userid": "foo",
-   			"ssid": "foo-probe",
-   			"mac_address": null,
-   			"absence_due_second": 600
-   		},
-   		{
-   			"userid": "bar",
-   			"ssid": null,
-   			"mac_address": "01:23:45:67:89:01",
-   			"absence_due_second": 300
-   		}
-   	\]
+   [
+     {
+       "userid": "foo",
+       "ssid": "foo-probe",
+       "mac_address": null,
+       "absence_due_second": 600
+     },
+     {
+       "userid": "bar",
+       "ssid": null,
+       "mac_address": "01:23:45:67:89:01",
+       "absence_due_second": 300
+     }
+   ]
    ```
 
 1. Export environment variable necessary to run detector server
