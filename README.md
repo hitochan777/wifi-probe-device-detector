@@ -1,6 +1,6 @@
 # wifi-probe-device-detector
 
-Detects devices' arrival and departure using WiFi probe request (MAC address or SSID) then uploads detected information to IoTHub.
+Detects devices' arrival and departure using WiFi probe request (MAC address or SSID) then uploads detected information to IoTHub.  
 If you want to process, store and view detected information on the web, check out [viewer](https://github.com/hitochan777/attedance-taker) and [gateway](https://github.com/hitochan777/attendance-taker-gateway).
 
 ## Requirements
