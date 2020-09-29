@@ -15,10 +15,9 @@ class AttendanceUploadService:
 
     def upload(self, attendance: Attendance):
         message = self.convert_attendance_to_message(attendance)
-        print(message)
         if not self.is_dry_run:
             self.iothub_client.send_message(message)
 
     def convert_attendance_to_message(self, attendance: Attendance):
-        message_text = f'{{"type": {attendance.attendance_type.value},"occurredAt": "{attendance.occurred_at.isoformat(timespec="seconds")+"Z"}", "userId": "{attendance.userid}}}"'
+        message_text = f'{{"type": {attendance.attendance_type.value},"occurredAt": "{attendance.occurred_at.isoformat(timespec="seconds")}", "userId": "{attendance.userid}"}}'
         return Message(message_text)
