@@ -38,6 +38,7 @@ class AttendanceStateContextManager:
 
     def handle_state_change(self, payload):
         now = datetime.now(timezone.utc)
+        print(payload)
         if payload["type"] in [AttendanceType.Attend, AttendanceType.Leave]:
             self.upload_service.upload(Attendance(payload["userid"], payload["type"], now))
         else:

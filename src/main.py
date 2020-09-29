@@ -2,6 +2,7 @@ import argparse
 import os
 import time
 import json
+from typing import List
 
 from device_sniffer import DeviceSniffer
 from attendance_upload_service import AttendanceUploadService
@@ -14,8 +15,9 @@ if __name__ == "__main__":
     parser.add_argument('--interface', '-i', default='mon0', help='monitor mode enabled interface')
     parser.add_argument('--config', '-c', default='mon0', help='path to JSON config file')
     args = parser.parse_args()
+    print(f"Listening on {args.interface}")
 
-    configs = []
+    configs: List[Config] = []
     with open(args.config, "r") as f:
         raw_configs = json.load(f)
         for raw_config in raw_configs:
@@ -24,10 +26,9 @@ if __name__ == "__main__":
     connection_string = os.environ.get("IOTHUB_DEVICE_CONNECTION_STRING")
     assert len(connection_string) > 0, "IoTHub connection string should not be empty"
     upload_service = AttendanceUploadService.create(connection_string, is_dry_run=False)
-    user_querier = UserQuerier()
+    user_querier = UserQuerier(configs)
     device_sniffer = DeviceSniffer(user_querier, args.interface)
     state_context_manager = AttendanceStateContextManager(configs, device_sniffer.get_observable(), upload_service)
-
     try:
         device_sniffer.start()
         while True:
