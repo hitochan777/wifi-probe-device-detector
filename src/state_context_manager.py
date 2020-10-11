@@ -3,7 +3,7 @@ from rx.subject import Subject
 from rx import Observable
 from rx import operators
 import json
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 from attendance_type import AttendanceType
 from device_sniffer import DeviceSniffer
@@ -39,8 +39,10 @@ class AttendanceStateContextManager:
     def handle_state_change(self, payload):
         now = datetime.now(timezone.utc)
         print(payload)
-        if payload["type"] in [AttendanceType.Attend, AttendanceType.Leave]:
+        if payload["type"] == AttendanceType.Attend:
             self.upload_service.upload(Attendance(payload["userid"], payload["type"], now))
+        elif payload["type"] == AttendanceType.Leave:
+            self.upload_service.upload(Attendance(payload["userid"], payload["type"], now - datetime.timedelta(seconds=payload["absence_due_second"])))
         else:
             raise ValueError(f"{payload['type']} is not expected")
 

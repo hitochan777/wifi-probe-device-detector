@@ -42,7 +42,8 @@ class AttendancenStateContext:
         self.is_attending = False
         self.subject.on_next({
             "type": AttendanceType.Leave,
-            "userid": self.userid
+            "userid": self.userid,
+            "absence_due_second": self.absence_due_second
         })
 
     def get_observable(self):
