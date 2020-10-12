@@ -6,14 +6,14 @@ from typing import List
 
 from device_sniffer import DeviceSniffer
 from attendance_upload_service import AttendanceUploadService
-from state_context_manager import AttendanceStateContextManager 
+from state_context_manager import AttendanceStateContextManager
 from config import Config
 from user_querier import UserQuerier
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--interface', '-i', default='mon0', help='monitor mode enabled interface')
-    parser.add_argument('--config', '-c', default='mon0', help='path to JSON config file')
+    parser.add_argument('--config', '-c', help='path to JSON config file')
     args = parser.parse_args()
     print(f"Listening on {args.interface}")
 
