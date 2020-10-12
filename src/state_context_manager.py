@@ -42,7 +42,7 @@ class AttendanceStateContextManager:
         if payload["type"] == AttendanceType.Attend:
             self.upload_service.upload(Attendance(payload["userid"], payload["type"], now))
         elif payload["type"] == AttendanceType.Leave:
-            self.upload_service.upload(Attendance(payload["userid"], payload["type"], now - datetime.timedelta(seconds=payload["absence_due_second"])))
+            self.upload_service.upload(Attendance(payload["userid"], payload["type"], now - timedelta(seconds=payload["absence_due_second"])))
         else:
             raise ValueError(f"{payload['type']} is not expected")
 
