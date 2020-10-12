@@ -13,7 +13,7 @@ from user_querier import UserQuerier
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--interface', '-i', default='mon0', help='monitor mode enabled interface')
-    parser.add_argument('--config', '-c', help='path to JSON config file')
+    parser.add_argument('--config', '-c', required=True, help='path to JSON config file')
     args = parser.parse_args()
     print(f"Listening on {args.interface}")
 
