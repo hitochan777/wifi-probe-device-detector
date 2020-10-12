@@ -5,7 +5,9 @@ If you want to process, store and view detected information on the web, check ou
 
 ## Requirements
 
-Python >= 3.8 or Docker
+* Python >= 3.8 or Docker
+* monitor mode enabled WiFi interface
+  TBW: Procedure for enabling monitor mode
 
 ## Installation
 
