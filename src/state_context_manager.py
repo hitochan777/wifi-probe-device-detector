@@ -32,7 +32,7 @@ class AttendanceStateContextManager:
         assert userid == sniff_config.userid
         assert userid not in self.observable_map
         filtered_notification = self.attend_notifier.pipe(operators.filter(lambda uid: uid == userid)).pipe(operators.throttle_first(1))
-        context = AttendancenStateContext(userid, False, filtered_notification)
+        context = AttendancenStateContext(userid, False, filtered_notification, absence_due_second=sniff_config.absence_due_second)
         self.observable_map[sniff_config.userid] = context.get_observable()
         self.observable_map[sniff_config.userid].subscribe(self.handle_state_change)
 
