@@ -10,6 +10,7 @@ pylint = "*"
 scapy = "*"
 rx = "*"
 azure-iot-device = "*"
+persist-queue = "*"
 
 [requires]
 python_version = "3.8"

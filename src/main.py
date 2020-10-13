@@ -14,6 +14,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--interface', '-i', default='mon0', help='monitor mode enabled interface')
     parser.add_argument('--config', '-c', required=True, help='path to JSON config file')
+    parser.add_argument('--queue-path', '-q', required=True, help='path for saving queue')
     args = parser.parse_args()
     print(f"Listening on {args.interface}")
 
@@ -25,7 +26,7 @@ if __name__ == "__main__":
 
     connection_string = os.environ.get("IOTHUB_DEVICE_CONNECTION_STRING")
     assert len(connection_string) > 0, "IoTHub connection string should not be empty"
-    upload_service = AttendanceUploadService.create(connection_string, is_dry_run=False)
+    upload_service = AttendanceUploadService.create(connection_string, args.queue_path, is_dry_run=False)
     user_querier = UserQuerier(configs)
     device_sniffer = DeviceSniffer(user_querier, args.interface)
     state_context_manager = AttendanceStateContextManager(configs, device_sniffer.get_observable(), upload_service)
