@@ -4,11 +4,12 @@ import time
 import json
 from typing import List
 
-from device_sniffer import DeviceSniffer
-from attendance_upload_service import AttendanceUploadService
-from state_context_manager import AttendanceStateContextManager
-from config import Config
-from user_querier import UserQuerier
+from src.device_sniffer import DeviceSniffer
+from src.attendance_upload_service import AttendanceUploadService
+from src.state_context_manager import AttendanceStateContextManager
+from src.config import Config
+from src.user_querier import UserQuerier
+from src.file_queue import FileQueue
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -24,9 +25,11 @@ if __name__ == "__main__":
         for raw_config in raw_configs:
             configs.append(Config(raw_config["userid"], raw_config["ssid"], raw_config["mac_address"], raw_config["absence_due_second"]))
 
+    queue = FileQueue(args.queue_path)
+
     connection_string = os.environ.get("IOTHUB_DEVICE_CONNECTION_STRING")
     assert len(connection_string) > 0, "IoTHub connection string should not be empty"
-    upload_service = AttendanceUploadService.create(connection_string, args.queue_path, is_dry_run=False)
+    upload_service = AttendanceUploadService.create(connection_string, queue, is_dry_run=False)
     user_querier = UserQuerier(configs)
     device_sniffer = DeviceSniffer(user_querier, args.interface)
     state_context_manager = AttendanceStateContextManager(configs, device_sniffer.get_observable(), upload_service)

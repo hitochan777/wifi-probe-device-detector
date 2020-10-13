@@ -1,17 +1,16 @@
 from azure.iot.device import IoTHubDeviceClient, Message
 
-from attendance import Attendance
-from queue_service import FileQueue
+from .attendance import Attendance
+from .queue import Queue
 
 
 class AttendanceUploadService:
     @staticmethod
-    def create(connection_string, queue_path: str, is_dry_run = False):
+    def create(connection_string, queue: Queue, is_dry_run = False):
         client = IoTHubDeviceClient.create_from_connection_string(connection_string)
-        queue = FileQueue(queue_path)
         return AttendanceUploadService(client, queue, is_dry_run=is_dry_run)
 
-    def __init__(self, client: IoTHubDeviceClient, queue: FileQueue, is_dry_run = False):
+    def __init__(self, client: IoTHubDeviceClient, queue: Queue, is_dry_run = False):
         self.iothub_client = client
         self.is_dry_run = is_dry_run
         self.queue = queue
