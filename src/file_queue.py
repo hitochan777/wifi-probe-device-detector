@@ -1,3 +1,4 @@
+from typing import Generator
 from persistqueue import Queue
 
 from .queue import Queue as QueueInterface
@@ -9,7 +10,7 @@ class FileQueue(QueueInterface):
     def is_empty(self) -> bool:
         return self.queue.empty()
 
-    def get_items(self):
+    def get_items(self) -> Generator[str, None, None]:
         while not self.is_empty():
             yield self.queue.get()
 
