@@ -1,6 +1,6 @@
 from typing import Optional, List
 
-from config import Config
+from .config import Config
 
 
 class UserQuerier:

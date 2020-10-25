@@ -7,8 +7,8 @@ from rx.core import Observer
 from rx.subject import Subject
 import rx
 
-from attendance import Attendance
-from user_querier import UserQuerier
+from .attendance import Attendance
+from .user_querier import UserQuerier
 
 
 class DeviceSniffer:
