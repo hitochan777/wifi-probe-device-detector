@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from attendance_type import AttendanceType
+from .attendance_type import AttendanceType
 
 class Attendance:
     def __init__(self, userid: str, attendance_type: AttendanceType, occurred_at: datetime):

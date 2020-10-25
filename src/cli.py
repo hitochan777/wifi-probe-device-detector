@@ -3,7 +3,7 @@ import logging
 import time
 import argparse
 
-from device_sniffer import DeviceSniffer
+from .device_sniffer import DeviceSniffer
 
 
 def print_capture(capture):

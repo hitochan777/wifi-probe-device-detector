@@ -2,7 +2,7 @@ from rx.scheduler import NewThreadScheduler
 from rx.subject import Subject
 from rx import Observable
 
-from attendance_type import AttendanceType
+from .attendance_type import AttendanceType
 
 class AttendancenStateContext:
     def __init__(self, userid: str, is_attending: bool, attend_notifier: Observable, absence_due_second: int = 3):
