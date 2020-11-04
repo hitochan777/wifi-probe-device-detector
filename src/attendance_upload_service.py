@@ -26,7 +26,6 @@ class AttendanceUploadService:
     def process_queued_messages(self):
         # get_items keeps yielding item as long as there is an item so first get a list at the certain point
         items = list(self.queue.get_items())
-        print(items)
         for item in items:
             self.send_message(item)
 
